@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SistemaDeCandidatos.Models;
 using SistemaDeCandidatos.Repositorios;
@@ -35,5 +35,51 @@ namespace SistemaDeCandidatos.Controllers
             UsuarioModel usuario = await _usuarioRepositorio.Adicionar(usuarioModel);
             return Ok(usuario);
         }
+
+        // Endpoint para deletar um usuário pelo ID
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUsuario(int id)
+        {
+            try
+            {
+                var deleted = await _usuarioRepositorio.Apagar(id);
+                if (deleted)
+                {
+                    return Ok($"Usuário com ID {id} foi deletado com sucesso.");
+                }
+                else
+                {
+                    return NotFound($"Usuário com ID {id} não encontrado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Ocorreu um erro ao excluir o usuário: {ex.Message}");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUsuario(int id, UsuarioModel usuario)
+        {
+            try
+            {
+                var existingUsuario = await _usuarioRepositorio.BuscarPorId(id);
+                if (existingUsuario == null)
+                {
+                    return NotFound($"Usuário com ID {id} não encontrado.");
+                }
+
+                existingUsuario.Nome = usuario.Nome;
+                existingUsuario.Email = usuario.Email;
+
+                var updatedUsuario = await _usuarioRepositorio.Atualizar(existingUsuario, id);
+                return Ok(updatedUsuario);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Ocorreu um erro ao atualizar o usuário: {ex.Message}");
+            }
+        }
+
     }
 }

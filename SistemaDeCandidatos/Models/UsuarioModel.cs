@@ -7,4 +7,3 @@ namespace SistemaDeCandidatos.Models
         public string? Email { get; set; }
     }
 } 
-

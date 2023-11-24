@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SistemaDeCandidatos.Models;
 namespace SistemaDeCandidatos.Data.Map
@@ -7,11 +7,12 @@ namespace SistemaDeCandidatos.Data.Map
     {
         public void Configure(EntityTypeBuilder<TarefaModel> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder.HasKey(x => x.CPF);
             builder.Property(x => x.Nome).IsRequired().HasMaxLength(255);
             builder.Property(x => x.Descricao).HasMaxLength(1000);
             builder.Property(x => x.Status).IsRequired();
 
+            
         }
     }
 }

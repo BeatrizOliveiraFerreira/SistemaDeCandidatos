@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SistemaDeCandidatos.Controllers;
 using SistemaDeCandidatos.Data.Map;
 using SistemaDeCandidatos.Models;

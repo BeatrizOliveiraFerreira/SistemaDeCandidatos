@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SistemaDeCandidatos.Data;
 using SistemaDeCandidatos.Models;
 using SistemaDeCandidatos.Repositorios.Interfaces;
@@ -12,9 +12,9 @@ namespace SistemaDeCandidatos.Repositorios
         {
             _dbContext = sistemaTarefasDbContext;
         }
-        public async Task<UsuarioModel> BuscarPorId(int id)
+        public async Task<UsuarioModel> BuscarPorCPF(int cpf)
         {
-            return await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
+            return await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.CPF == cpf);
         }
 
         public async Task<List<UsuarioModel>> BuscarTodosUsuarios()
@@ -30,39 +30,40 @@ namespace SistemaDeCandidatos.Repositorios
             return usuario;
         }
 
-        public async Task<UsuarioModel> Atualizar(UsuarioModel usuario, int id)
+        public async Task<UsuarioModel> Atualizar(UsuarioModel usuario, int cpf)
         {
-            UsuarioModel usuarioPorId = await BuscarPorId(id);
-            if (usuarioPorId == null)
+            UsuarioModel usuarioPorCPF = await BuscarPorCPF(cpf);
+            if (usuarioPorCPF == null)
             {
-                throw new Exception($"Usuário para o ID: {id} não foi encontrado no banco de dados");
+                throw new Exception($"Usuário para o CPF: {cpf} não foi encontrado no banco de dados");
             }
 
-            usuarioPorId.Nome = usuario.Nome;
-            usuarioPorId.Email = usuario.Email;
+            usuarioPorCPF.Nome = usuario.Nome;
+            usuarioPorCPF.Email = usuario.Email;
 
-            _dbContext.Usuarios.Update(usuarioPorId);
+            _dbContext.Usuarios.Update(usuarioPorCPF);
             await _dbContext.SaveChangesAsync();
 
-            return usuarioPorId;
+            return usuarioPorCPF;
         }
 
-        public async Task<bool> Apagar(int id)
+        public async Task<bool> Apagar(int cpf)
         {
-            UsuarioModel usuarioPorId = await BuscarPorId(id);
-            if (usuarioPorId == null)
+            UsuarioModel usuarioPorCPF = await BuscarPorCPF(cpf);
+            if (usuarioPorCPF == null)
             {
-                throw new Exception($"Usuário para o ID: {id} não foi encontrado no banco de dados");
+                throw new Exception($"Usuário para o CPF: {cpf} não foi encontrado no banco de dados");
             }
 
-            _dbContext.Usuarios.Remove(usuarioPorId);
+            _dbContext.Usuarios.Remove(usuarioPorCPF);
            await _dbContext.SaveChangesAsync();
             return true;
 
         }
 
 
-        
+
+
     }
 
 }

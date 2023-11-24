@@ -22,10 +22,10 @@ namespace SistemaDeCandidatos.Controllers
             return Ok(usuarios);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UsuarioModel>> BuscarPorId(int id)
+        [HttpGet("{cpf}")]
+        public async Task<ActionResult<UsuarioModel>> BuscarPorCPF(int cpf)
         {
-            UsuarioModel usuario = await _usuarioRepositorio.BuscarPorId(id);
+            UsuarioModel usuario = await _usuarioRepositorio.BuscarPorCPF(cpf);
             return Ok(usuario);
         }
 
@@ -36,20 +36,20 @@ namespace SistemaDeCandidatos.Controllers
             return Ok(usuario);
         }
 
-        // Endpoint para deletar um usuário pelo ID
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUsuario(int id)
+        // Endpoint para deletar um usuário pelo CPF
+        [HttpDelete("{cpf}")]
+        public async Task<IActionResult> DeleteUsuario(int cpf)
         {
             try
             {
-                var deleted = await _usuarioRepositorio.Apagar(id);
+                var deleted = await _usuarioRepositorio.Apagar(cpf);
                 if (deleted)
                 {
-                    return Ok($"Usuário com ID {id} foi deletado com sucesso.");
+                    return Ok($"Usuário com CPF {cpf} foi deletado com sucesso.");
                 }
                 else
                 {
-                    return NotFound($"Usuário com ID {id} não encontrado.");
+                    return NotFound($"Usuário com CPF {cpf} não encontrado.");
                 }
             }
             catch (Exception ex)
@@ -59,20 +59,20 @@ namespace SistemaDeCandidatos.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUsuario(int id, UsuarioModel usuario)
+        public async Task<IActionResult> UpdateUsuario(int cpf, UsuarioModel usuario)
         {
             try
             {
-                var existingUsuario = await _usuarioRepositorio.BuscarPorId(id);
+                var existingUsuario = await _usuarioRepositorio.BuscarPorCPF(cpf);
                 if (existingUsuario == null)
                 {
-                    return NotFound($"Usuário com ID {id} não encontrado.");
+                    return NotFound($"Usuário com CPF {cpf} não encontrado.");
                 }
 
                 existingUsuario.Nome = usuario.Nome;
                 existingUsuario.Email = usuario.Email;
 
-                var updatedUsuario = await _usuarioRepositorio.Atualizar(existingUsuario, id);
+                var updatedUsuario = await _usuarioRepositorio.Atualizar(existingUsuario, cpf);
                 return Ok(updatedUsuario);
             }
             catch (Exception ex)
